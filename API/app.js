@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({origin:process.env.CLIENT_URL,credentials:true}))
 dotenv.config()
-console.log(process.env.CLIENT_URL);
+
 app.use("/api/auth",authRoute)
 
 

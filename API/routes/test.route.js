@@ -1,5 +1,11 @@
-import express from "express"
+import express from "express";
+import { shouldBeAdmin, shouldBeLoggedIn } from "../controller/test.controller.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/")
+router.get("/should-be-logged-in",verifyToken, shouldBeLoggedIn);
+
+router.get("/should-be-admin", shouldBeAdmin);
+
+export default router;

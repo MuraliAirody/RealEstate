@@ -3,10 +3,12 @@ import "./profileUpdatePage.scss";
 import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import UploadWidget from "../../components/uploadWidget/UploadWidget";
 
 function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
   const [error, setError] = useState("");
+  const [avatar, setAvatar] = useState(currentUser.avatar);
 
   const navigate = useNavigate();
 
@@ -14,13 +16,14 @@ function ProfileUpdatePage() {
     e.preventDefault();
     const formData = new FormData(e.target);
 
-    const { username, email, password } = Object.fromEntries(formData);
+    const { username, email, password} = Object.fromEntries(formData);
 
     try {
       const res = await apiRequest.put(`/users/${currentUser.id}`, {
         username,
         email,
         password,
+        avatar
       });
       updateUser(res.data);
       navigate("/profile");
@@ -62,7 +65,17 @@ function ProfileUpdatePage() {
         </form>
       </div>
       <div className="sideContainer">
-        <img src={currentUser.avatar || "/noAvatar.png"} alt="" className="avatar" />
+        <img src={avatar || "/noAvatar.png"} alt="" className="avatar" />
+        <UploadWidget
+          uwConfig={{
+            cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD,
+            uploadPreset: import.meta.env.VITE_CLOUDINARY_PRESET,
+            multiple: false,
+            maxImageFileSize: 2000000,
+            folder: "avatars",
+          }}
+          setAvatar={setAvatar}
+        />
       </div>
     </div>
   );

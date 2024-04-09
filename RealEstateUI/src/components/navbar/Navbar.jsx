@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -6,6 +6,20 @@ import { AuthContext } from "../../context/AuthContext";
 function Navbar() {
   const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 738) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <nav>
@@ -22,10 +36,7 @@ function Navbar() {
       <div className="right">
         {currentUser ? (
           <div className="user">
-            <img
-              src={currentUser.avatar || "/noAvatar.png"}
-              alt=""
-            />
+            <img src={currentUser.avatar || "/noAvatar.png"} alt="" />
             <span>{currentUser.username}</span>
             <Link to="/profile" className="profile">
               <div className="notification">3</div>

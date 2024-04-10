@@ -4,9 +4,10 @@ import "./listPage.scss";
 import { listData } from "../../lib/dummyData";
 import Filter from "../../components/filter/Filter";
 import Map from "../../components/map/Map";
+import {useLoaderData } from "react-router-dom"
 
 function ListPage() {
-  const data = listData;
+  const data = useLoaderData();
 
   return (
     <div className="listPage">
